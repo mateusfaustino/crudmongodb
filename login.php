@@ -3,7 +3,6 @@ require 'connection.php'; // Conexão com o MongoDB
 session_start();
 
 if (isset($_POST['email'])) {
-    var_dump($_POST);
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
