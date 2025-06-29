@@ -17,14 +17,6 @@ services:
     volumes:
       - mongo_data:/data/db
 
-  compass:
-    image: mongodb/compass:latest
-    environment:
-      - DISPLAY=${DISPLAY}
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    depends_on:
-      - mongo
 
 volumes:
   mongo_data:
