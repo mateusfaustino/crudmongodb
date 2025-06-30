@@ -114,7 +114,7 @@ $cursor = $manager->executeQuery('catalogosites.sites', $query); // Usando "cata
 <body>
   <div class="container">
     <h1 class="page-title">Gerenciamento de Sites</h1>
-    <p class="welcome-message">Bem-vindo, <?php echo $_SESSION['email']; ?>!</p>
+    <p class="welcome-message">Bem-vindo, <?php echo htmlspecialchars($_SESSION['email'], ENT_QUOTES, 'UTF-8'); ?>!</p>
 
     <div class="actions">
       <a href="create.php">Adicionar Novo Site</a>
@@ -131,20 +131,20 @@ $cursor = $manager->executeQuery('catalogosites.sites', $query); // Usando "cata
           <th>Ações</th>
         </tr>
       </thead>
-      <tbody>
-        <?php
-        foreach ($cursor as $document) {
-            echo "<tr>";
-            echo "<td>" . $document->_id . "</td>";
-            echo "<td>" . $document->nome . "</td>";
-            echo "<td><a href='" . $document->endereco . "' target='_blank'>" . $document->endereco . "</a></td>";
-            echo "<td>";
-            echo "<a href='update.php?id=" . $document->_id . "'>Editar</a> | ";
-            echo "<a href='delete.php?id=" . $document->_id . "'>Deletar</a>";
-            echo "</td>";
-            echo "</tr>";
-        }
-        ?>
+        <tbody>
+          <?php
+          foreach ($cursor as $document) {
+              echo "<tr>";
+              echo "<td>" . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "</td>";
+              echo "<td>" . htmlspecialchars($document->nome, ENT_QUOTES, 'UTF-8') . "</td>";
+              echo "<td><a href='" . htmlspecialchars($document->endereco, ENT_QUOTES, 'UTF-8') . "' target='_blank'>" . htmlspecialchars($document->endereco, ENT_QUOTES, 'UTF-8') . "</a></td>";
+              echo "<td>";
+              echo "<a href='update.php?id=" . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "'>Editar</a> | ";
+              echo "<a href='delete.php?id=" . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "'>Deletar</a>";
+              echo "</td>";
+              echo "</tr>";
+          }
+          ?>
       </tbody>
     </table>
   </div>
