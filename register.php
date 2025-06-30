@@ -1,40 +1,32 @@
 <?php
-require 'connection.php'; // Conexão com o MongoDB
-session_start();
+require 'connection.php';
 
-if (isset($_POST['email'])) {
+if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     $email = $_POST['email'];
     $senha = $_POST['senha'];
-    
-    // Criar uma consulta para buscar o usuário pelo email
-    $filter = ['email' => $email];
-    $query = new MongoDB\Driver\Query($filter);
 
-    // Executar a consulta
-    $cursor = $manager->executeQuery('catalogosites.usuarios', $query); // Usando "catalogosites"
-    $usuario = current($cursor->toArray());
+    $hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    // Verificar se o usuário foi encontrado e se a senha está correta utilizando hash
-    if ($usuario && password_verify($senha, $usuario->senha)) {
-        // Iniciar a sessão e redirecionar para a página index.php
-        $_SESSION['email'] = $usuario->email;
-        header("Location: index.php");
-        exit();
-    } else {
-        $erro = "Email ou senha inválidos!";
-    }
+    $document = [
+        'email' => $email,
+        'senha' => $hash
+    ];
+
+    $bulk = new MongoDB\Driver\BulkWrite;
+    $bulk->insert($document);
+    $manager->executeBulkWrite('catalogosites.usuarios', $bulk);
+
+    $mensagem = 'Usuário cadastrado com sucesso!';
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - CRUD de Sites</title>
+  <title>Cadastro de Usuário</title>
   <link rel="stylesheet" href="./css/reset.css" />
   <style>
-    /* Estilos diretos na tag style conforme solicitado */
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,7 +37,7 @@ if (isset($_POST['email'])) {
       min-height: 100vh;
     }
 
-    .login-container {
+    .register-container {
       background: #ffffff;
       padding: 2.5rem 2rem;
       border-radius: 12px;
@@ -54,7 +46,7 @@ if (isset($_POST['email'])) {
       max-width: 400px;
     }
 
-    .login-title {
+    .register-title {
       text-align: center;
       margin-bottom: 1.5rem;
       font-size: 1.8rem;
@@ -105,28 +97,23 @@ if (isset($_POST['email'])) {
       background-color: #0056b3;
     }
 
-    .error-message {
-      color: #d00000;
-      margin-top: 1rem;
+    .message {
+      color: #155724;
+      background-color: #d4edda;
+      padding: 1rem;
+      border-radius: 8px;
       text-align: center;
-      font-weight: 500;
-    }
-
-    .register-link {
-      text-align: center;
-      margin-top: 1rem;
-    }
-
-    .register-link a {
-      color: #007bff;
-      text-decoration: none;
+      margin-bottom: 1rem;
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h1 class="login-title">Login</h1>
-    <form action="login.php" method="post">
+  <div class="register-container">
+    <h1 class="register-title">Cadastro</h1>
+    <?php if (isset($mensagem)) : ?>
+      <div class="message"><?= $mensagem ?></div>
+    <?php endif; ?>
+    <form action="register.php" method="post">
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" name="email" required />
@@ -135,15 +122,8 @@ if (isset($_POST['email'])) {
         <label for="senha">Senha:</label>
         <input type="password" name="senha" required />
       </div>
-      <input class="submit-btn" type="submit" value="Entrar" />
+      <input class="submit-btn" type="submit" value="Cadastrar" />
     </form>
-
-    <p class="register-link">Ainda não possui conta? <a href="register.php">Cadastre-se</a></p>
-
-    <?php if (isset($erro)) : ?>
-      <p class="error-message"><?= $erro ?></p>
-    <?php endif; ?>
   </div>
 </body>
 </html>
-
