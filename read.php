@@ -6,7 +6,12 @@ require 'connection.php';
 $query = new MongoDB\Driver\Query([]);
 
 // Executar a consulta
-$cursor = $manager->executeQuery('catalogosites.sites', $query);
+try {
+    $cursor = $manager->executeQuery('catalogosites.sites', $query);
+} catch (\Throwable $e) {
+    error_log('MongoDB query error: ' . $e->getMessage());
+    die('Erro ao buscar dados.');
+}
 
 // Exibir os resultados
 echo "<h2>Lista de Sites</h2>";

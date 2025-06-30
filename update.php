@@ -14,8 +14,13 @@ if (isset($_GET['id'])) {
     // Localizar o registro a ser editado
     $filter = ['_id' => $id];
     $query = new MongoDB\Driver\Query($filter);
-    $cursor = $manager->executeQuery('catalogosites.sites', $query);
-    $site = current($cursor->toArray());
+    try {
+        $cursor = $manager->executeQuery('catalogosites.sites', $query);
+        $site = current($cursor->toArray());
+    } catch (\Throwable $e) {
+        error_log('MongoDB fetch error: ' . $e->getMessage());
+        die('Erro ao buscar dados.');
+    }
 }
 
 ?>
@@ -134,13 +139,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     );
 
     // Executar a atualização
-    $manager->executeBulkWrite('catalogosites.sites', $bulk);
+    try {
+        $manager->executeBulkWrite('catalogosites.sites', $bulk);
+    } catch (\Throwable $e) {
+        error_log('MongoDB update error: ' . $e->getMessage());
+        die('Erro ao atualizar dados.');
+    }
 
         // Localizar o registro a ser editado
     $filter = ['_id' => $id];
     $query = new MongoDB\Driver\Query($filter);
-    $cursor = $manager->executeQuery('catalogosites.sites', $query);
-    $site = current($cursor->toArray());
+    try {
+        $cursor = $manager->executeQuery('catalogosites.sites', $query);
+        $site = current($cursor->toArray());
+    } catch (\Throwable $e) {
+        error_log('MongoDB fetch error: ' . $e->getMessage());
+        die('Erro ao buscar dados.');
+    }
 
     echo "<div class='message'> Site atualizado com sucesso! </div>";
 }

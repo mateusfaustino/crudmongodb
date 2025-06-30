@@ -123,7 +123,12 @@ $token = generate_csrf_token();
             $bulk->insert($document);
 
             // Inserir no MongoDB
-            $manager->executeBulkWrite('catalogosites.sites', $bulk);
+            try {
+                $manager->executeBulkWrite('catalogosites.sites', $bulk);
+            } catch (\Throwable $e) {
+                error_log('MongoDB insert error: ' . $e->getMessage());
+                die('Erro ao inserir dados.');
+            }
 
             echo "<div class='message'>Site cadastrado com sucesso!</div>";
         }
