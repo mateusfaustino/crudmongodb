@@ -20,8 +20,13 @@ if (isset($_POST['email'])) {
     $query = new MongoDB\Driver\Query($filter);
 
     // Executar a consulta
-    $cursor = $manager->executeQuery('catalogosites.usuarios', $query); // Usando "catalogosites"
-    $usuario = current($cursor->toArray());
+    try {
+        $cursor = $manager->executeQuery('catalogosites.usuarios', $query); // Usando "catalogosites"
+        $usuario = current($cursor->toArray());
+    } catch (\Throwable $e) {
+        error_log('MongoDB query error: ' . $e->getMessage());
+        die('Erro ao buscar usuário.');
+    }
 
     // Verificar se o usuário foi encontrado e se a senha está correta utilizando hash
     if ($usuario && password_verify($senha, $usuario->senha)) {

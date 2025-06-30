@@ -11,7 +11,12 @@ $manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
 
 // Consulta para selecionar os documentos da coleção 'sites' no banco 'banco'
 $query = new MongoDB\Driver\Query([]);  // Consulta vazia para buscar todos os documentos
-$cursor = $manager->executeQuery('catalogosites.sites', $query);
+try {
+    $cursor = $manager->executeQuery('catalogosites.sites', $query);
+} catch (\Throwable $e) {
+    error_log('MongoDB query error: ' . $e->getMessage());
+    die('Erro ao executar consulta.');
+}
 
 // Exibir os resultados
 echo "<table border='1'>";
