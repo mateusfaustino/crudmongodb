@@ -1,6 +1,9 @@
 <?php
 // update.php
+session_start();
 require 'connection.php';
+require 'csrf.php';
+$token = generate_csrf_token();
 
 if (isset($_GET['id'])) {
     $id = new MongoDB\BSON\ObjectId($_GET['id']);
@@ -107,6 +110,9 @@ if (isset($_GET['id'])) {
 <body>
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        die('CSRF validation failed');
+    }
     $id = new MongoDB\BSON\ObjectId($_POST['id']);
     $nome = $_POST['nome'];
     $endereco = $_POST['endereco'];
@@ -133,6 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="form-container">
     <h1 class="form-title">Editar Site</h1>
     <form action="update.php" method="post">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>" />
       <input type="hidden" name="id" value="<?= htmlspecialchars((string) $site->_id, ENT_QUOTES, 'UTF-8') ?>" />
       
       <div class="form-group">

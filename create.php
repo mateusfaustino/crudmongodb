@@ -1,7 +1,9 @@
 <?php
 // create.php
+session_start();
 require 'connection.php';
-
+require 'csrf.php';
+$token = generate_csrf_token();
 
 ?>
 
@@ -100,6 +102,9 @@ require 'connection.php';
 <body>
     <?php
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+                die('CSRF validation failed');
+            }
             // Capturar dados do formulário
             $nome = $_POST['nome'];
             $endereco = $_POST['endereco'];
@@ -123,6 +128,7 @@ require 'connection.php';
 
     <h1 class="form-title">Adicionar Novo Site</h1>
     <form action="create.php" method="post">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>" />
       <div class="form-group">
         <label for="nome">Nome do site:</label>
         <input type="text" id="nome" name="nome" required />

@@ -1,7 +1,13 @@
 <?php
+session_start();
 require 'connection.php';
+require 'csrf.php';
+$token = generate_csrf_token();
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        die('CSRF validation failed');
+    }
     $email = $_POST['email'];
     $senha = $_POST['senha'];
 
@@ -114,6 +120,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
       <div class="message"><?= $mensagem ?></div>
     <?php endif; ?>
     <form action="register.php" method="post">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>" />
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" name="email" required />
