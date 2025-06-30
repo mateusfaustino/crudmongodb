@@ -1,8 +1,13 @@
 <?php
-require 'connection.php'; // Conexão com o MongoDB
 session_start();
+require 'connection.php'; // Conexão com o MongoDB
+require 'csrf.php';
+$token = generate_csrf_token();
 
 if (isset($_POST['email'])) {
+    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+        die('CSRF validation failed');
+    }
     $email = $_POST['email'];
     $senha = $_POST['senha'];
     
@@ -127,6 +132,7 @@ if (isset($_POST['email'])) {
   <div class="login-container">
     <h1 class="login-title">Login</h1>
     <form action="login.php" method="post">
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($token, ENT_QUOTES, 'UTF-8'); ?>" />
       <div class="form-group">
         <label for="email">Email:</label>
         <input type="email" name="email" required />
