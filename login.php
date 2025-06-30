@@ -8,8 +8,12 @@ if (isset($_POST['email'])) {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_DEFAULT);
+
+    if (!$email || $senha === null) {
+        $erro = "Email ou senha inválidos!";
+    } else {
     
     // Criar uma consulta para buscar o usuário pelo email
     $filter = ['email' => $email];

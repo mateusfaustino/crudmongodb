@@ -8,21 +8,26 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
-    $email = $_POST['email'];
-    $senha = $_POST['senha'];
 
-    $hash = password_hash($senha, PASSWORD_DEFAULT);
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_DEFAULT);
 
-    $document = [
-        'email' => $email,
-        'senha' => $hash
-    ];
+    if (!$email || $senha === null) {
+        $mensagem = 'Dados de cadastro inválidos!';
+    } else {
+        $hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $bulk = new MongoDB\Driver\BulkWrite;
-    $bulk->insert($document);
-    $manager->executeBulkWrite('catalogosites.usuarios', $bulk);
+        $document = [
+            'email' => $email,
+            'senha' => $hash
+        ];
 
-    $mensagem = 'Usuário cadastrado com sucesso!';
+        $bulk = new MongoDB\Driver\BulkWrite;
+        $bulk->insert($document);
+        $manager->executeBulkWrite('catalogosites.usuarios', $bulk);
+
+        $mensagem = 'Usuário cadastrado com sucesso!';
+    }
 }
 ?>
 <!DOCTYPE html>

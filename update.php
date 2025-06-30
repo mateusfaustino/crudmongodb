@@ -6,7 +6,10 @@ require 'csrf.php';
 $token = generate_csrf_token();
 
 if (isset($_GET['id'])) {
-    $id = new MongoDB\BSON\ObjectId($_GET['id']);
+    $rawId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+    if ($rawId) {
+        $id = new MongoDB\BSON\ObjectId($rawId);
+    }
 
     // Localizar o registro a ser editado
     $filter = ['_id' => $id];
@@ -113,9 +116,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
-    $id = new MongoDB\BSON\ObjectId($_POST['id']);
-    $nome = $_POST['nome'];
-    $endereco = $_POST['endereco'];
+    $rawId = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $endereco = filter_input(INPUT_POST, 'endereco', FILTER_SANITIZE_URL);
+
+    if (!$rawId || !$nome || !$endereco) {
+        die('Dados do formulário inválidos.');
+    }
+
+    $id = new MongoDB\BSON\ObjectId($rawId);
 
     // Preparar a atualização
     $bulk = new MongoDB\Driver\BulkWrite;

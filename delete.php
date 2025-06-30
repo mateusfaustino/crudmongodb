@@ -3,7 +3,11 @@
 require 'connection.php';
 
 if (isset($_GET['id'])) {
-    $id = new MongoDB\BSON\ObjectId($_GET['id']);
+    $rawId = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+    if (!$rawId) {
+        die('ID inválido.');
+    }
+    $id = new MongoDB\BSON\ObjectId($rawId);
 
     // Preparar a exclusão
     $bulk = new MongoDB\Driver\BulkWrite;
