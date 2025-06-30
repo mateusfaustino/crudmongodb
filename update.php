@@ -133,16 +133,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <div class="form-container">
     <h1 class="form-title">Editar Site</h1>
     <form action="update.php" method="post">
-      <input type="hidden" name="id" value="<?= $site->_id ?>" />
+      <input type="hidden" name="id" value="<?= htmlspecialchars((string) $site->_id, ENT_QUOTES, 'UTF-8') ?>" />
       
       <div class="form-group">
         <label for="nome">Nome do site:</label>
-        <input type="text" id="nome" name="nome" value="<?= $site->nome ?>" required />
+        <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($site->nome, ENT_QUOTES, 'UTF-8') ?>" required />
       </div>
 
       <div class="form-group">
         <label for="endereco">Endereço:</label>
-        <input type="text" id="endereco" name="endereco" value="<?= $site->endereco ?>" required />
+        <input type="text" id="endereco" name="endereco" value="<?= htmlspecialchars($site->endereco, ENT_QUOTES, 'UTF-8') ?>" required />
       </div>
 
       <input type="submit" class="submit-btn" value="Atualizar Site" />

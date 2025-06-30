@@ -11,10 +11,10 @@ $cursor = $manager->executeQuery('catalogosites.sites', $query);
 // Exibir os resultados
 echo "<h2>Lista de Sites</h2>";
 foreach ($cursor as $document) {
-    echo "ID: " . $document->_id . "<br>";
-    echo "Nome: " . $document->nome . "<br>";
-    echo "Endereço: " . $document->endereco . "<br>";
-    echo "<a href='update.php?id=" . $document->_id . "'>Editar</a> | ";
-    echo "<a href='delete.php?id=" . $document->_id . "'>Deletar</a><br><br>";
+    echo "ID: " . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "<br>";
+    echo "Nome: " . htmlspecialchars($document->nome, ENT_QUOTES, 'UTF-8') . "<br>";
+    echo "Endereço: " . htmlspecialchars($document->endereco, ENT_QUOTES, 'UTF-8') . "<br>";
+    echo "<a href='update.php?id=" . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "'>Editar</a> | ";
+    echo "<a href='delete.php?id=" . htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8') . "'>Deletar</a><br><br>";
 }
 ?>
