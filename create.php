@@ -105,9 +105,13 @@ $token = generate_csrf_token();
             if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
                 die('CSRF validation failed');
             }
-            // Capturar dados do formulário
-            $nome = $_POST['nome'];
-            $endereco = $_POST['endereco'];
+            // Capturar dados do formulário com validação
+            $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            $endereco = filter_input(INPUT_POST, 'endereco', FILTER_SANITIZE_URL);
+
+            if (!$nome || !$endereco) {
+                die('Dados do formulário inválidos.');
+            }
 
             $document = [
                 'nome' => $nome,
