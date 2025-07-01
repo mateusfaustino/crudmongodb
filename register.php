@@ -3,11 +3,11 @@ session_start();
 require 'connection.php';
 require 'csrf.php';
 require 'template.php';
-$token = generate_csrf_token();
+$token = generateCsrfToken();
 $mensagem = null;
 
 if ($_SERVER["REQUEST_METHOD"] === 'POST') {
-    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
 
@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
     }
 }
 
-render_template('register', ['token' => $token, 'mensagem' => $mensagem]);
+renderTemplate('register', ['token' => $token, 'mensagem' => $mensagem]);
 
 ?>
 

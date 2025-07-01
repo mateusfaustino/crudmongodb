@@ -23,6 +23,6 @@ try {
 }
 
 $email = $_SESSION['email'];
-render_template('index', compact('sites', 'email'));
+renderTemplate('index', compact('sites', 'email'));
 ?>
 

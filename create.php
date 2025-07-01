@@ -4,11 +4,11 @@ session_start();
 require 'connection.php';
 require 'csrf.php';
 require 'template.php';
-$token = generate_csrf_token();
+$token = generateCsrfToken();
 $message = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
     // Capturar dados do formulário com validação
@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = 'Site cadastrado com sucesso!';
 }
 
-render_template('create', ['token' => $token, 'message' => $message]);
+renderTemplate('create', ['token' => $token, 'message' => $message]);
 
 ?>
 

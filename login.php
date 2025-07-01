@@ -3,13 +3,13 @@ session_start();
 require 'connection.php'; // Conexão com o MongoDB
 require 'csrf.php';
 require 'template.php';
-$token = generate_csrf_token();
+$token = generateCsrfToken();
 $erro = null;
 
 if (isset($_POST['email'])) {
 
 
-    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -43,6 +43,6 @@ if (isset($_POST['email'])) {
     }
 }}
 
-render_template('login', ['token' => $token, 'erro' => $erro]);
+renderTemplate('login', ['token' => $token, 'erro' => $erro]);
 
 ?>
