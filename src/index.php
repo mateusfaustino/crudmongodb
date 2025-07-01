@@ -1,28 +1,22 @@
 <?php
 session_start();
 
-// Verificar se o usuário está logado
 if (!isset($_SESSION['email'])) {
     header("Location: login.php");
     exit();
 }
 
-require 'connection.php';
+require_once '../vendor/autoload.php'; // Autoload via Composer
+require 'connection.php'; // define $manager, $mongoDb
 require 'template.php';
 
-// Criar uma consulta vazia para buscar todos os documentos
-$query = new MongoDB\Driver\Query([]);
+use Domains\Site\Repositories\MongoSiteRepository;
+use Domains\Site\Services\SiteListService;
 
-// Executar a consulta
-try {
-    $cursor = $manager->executeQuery($mongoDb . '.sites', $query);
-    $sites = $cursor->toArray();
-} catch (\Throwable $e) {
-    error_log('MongoDB query error: ' . $e->getMessage());
-    die('Erro ao buscar dados.');
-}
+$repo = new MongoSiteRepository($manager, $mongoDb);
+$service = new SiteListService($repo);
+$sites = $service->listar();
 
 $email = $_SESSION['email'];
-renderTemplate('index', compact('sites', 'email'));
-?>
 
+renderTemplate('index', compact('sites', 'email'));

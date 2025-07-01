@@ -1,8 +1,13 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
 session_start();
-require 'connection.php';
+require 'connection.php'; // define $manager e $mongoDb
 require 'csrf.php';
 require 'template.php';
+
+use Domains\User\Repositories\MongoUserRepository;
+use Domains\User\Services\UserRegistrationService;
+
 $token = generateCsrfToken();
 $mensagem = null;
 
@@ -11,33 +16,25 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         die('CSRF validation failed');
     }
 
+    $nome = trim($_POST['nome'] ?? '');
     $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $senha = filter_input(INPUT_POST, 'senha', FILTER_DEFAULT);
+    $senha = $_POST['senha'] ?? null;
 
-    if (!$email || $senha === null) {
+    if (!$email || !$senha || empty($nome)) {
         $mensagem = 'Dados de cadastro inválidos!';
     } else {
-        $hash = password_hash($senha, PASSWORD_DEFAULT);
-
-        $document = [
-            'email' => $email,
-            'senha' => $hash
-        ];
-
-        $bulk = new MongoDB\Driver\BulkWrite;
-        $bulk->insert($document);
         try {
-            $manager->executeBulkWrite($mongoDb . '.usuarios', $bulk);
-        } catch (\Throwable $e) {
-            error_log('MongoDB insert error: ' . $e->getMessage());
-            die('Erro ao cadastrar usuário.');
+            $repo = new MongoUserRepository($manager, $mongoDb);
+            $service = new UserRegistrationService($repo);
+            $service->register($nome, $email, $senha);
+            $mensagem = 'Usuário cadastrado com sucesso!';
+        } catch (Throwable $e) {
+            echo $e->getMessage();
+            die();
+            error_log($e->getMessage());
+            $mensagem = 'Erro ao cadastrar usuário.';
         }
-
-        $mensagem = 'Usuário cadastrado com sucesso!';
     }
 }
 
 renderTemplate('register', ['token' => $token, 'mensagem' => $mensagem]);
-
-?>
-

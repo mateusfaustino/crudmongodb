@@ -1,5 +1,5 @@
 <?php
-$mongoHost = getenv('MONGO_HOST') ?: 'mongo';
+$mongoHost = getenv('MONGO_HOST') ?: 'localhost';
 $mongoPort = getenv('MONGO_PORT') ?: '27017';
 $mongoDb   = getenv('MONGO_DB')   ?: 'catalogosites';
 $manager = null;
@@ -9,4 +9,3 @@ try {
     error_log('MongoDB connection error: ' . $e->getMessage());
     die('Falha ao conectar ao banco de dados.');
 }
-

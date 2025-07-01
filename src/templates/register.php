@@ -20,6 +20,10 @@
         <input type="email" name="email" required />
       </div>
       <div class="form-group">
+        <label for="nome">nome:</label>
+        <input type="text" name="nome" required />
+      </div>
+      <div class="form-group">
         <label for="senha">Senha:</label>
         <input type="password" name="senha" required />
       </div>

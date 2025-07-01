@@ -1,3 +1,7 @@
+<?php
+
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -30,10 +34,10 @@
         <tbody>
           <?php foreach ($sites as $document): ?>
               <tr>
-              <td><?= htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8'); ?></td>
-              <td><?= htmlspecialchars($document->nome, ENT_QUOTES, 'UTF-8'); ?></td>
-              <td><a href="<?= htmlspecialchars($document->endereco, ENT_QUOTES, 'UTF-8'); ?>" target="_blank">
-                  <?= htmlspecialchars($document->endereco, ENT_QUOTES, 'UTF-8'); ?></a></td>
+              <td><?= htmlspecialchars((string) $document->getId(), ENT_QUOTES, 'UTF-8'); ?></td>
+              <td><?= htmlspecialchars($document->getNome(), ENT_QUOTES, 'UTF-8'); ?></td>
+              <td><a href="<?= htmlspecialchars($document->getEndereco(), ENT_QUOTES, 'UTF-8'); ?>" target="_blank">
+                  <?= htmlspecialchars($document->getEndereco(), ENT_QUOTES, 'UTF-8'); ?></a></td>
               <td>
               <a href='update.php?id=<?= htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8'); ?>'>Editar</a> |
               <a href='delete.php?id=<?= htmlspecialchars((string) $document->_id, ENT_QUOTES, 'UTF-8'); ?>'>Deletar</a>
