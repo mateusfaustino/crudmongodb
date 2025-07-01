@@ -8,6 +8,14 @@ The repository is organized so that all PHP source code resides in the `src` dir
 
 - Docker
 - Docker Compose
+- Composer
+
+## Composer Setup
+
+Run `composer install` in the project root to generate the `vendor`
+directory and the autoloader that the application relies on. If you add new
+classes under `src`, run `composer dump-autoload` to refresh the autoload
+mapping.
 
 ## Running the Application
 
