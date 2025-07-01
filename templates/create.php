@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="./css/reset.css" />
   <link rel="stylesheet" href="./css/style.css" />
 </head>
-<body class="center-page">
+<body class="center-page" style="flex-direction:column;">
   <?php if (!empty($message)): ?>
     <div class='message'><?= $message ?></div>
   <?php endif; ?>
