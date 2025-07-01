@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/www/html
 
 # Copy application
-COPY . /var/www/html
+COPY src/ /var/www/html
 
 # Set Apache DocumentRoot
 ENV APACHE_DOCUMENT_ROOT=/var/www/html

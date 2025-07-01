@@ -2,6 +2,8 @@
 
 This project is a simple PHP CRUD application that uses MongoDB as its database. Docker Compose sets up both the PHP Apache container and the MongoDB container for local development.
 
+The repository is organized so that all PHP source code resides in the `src` directory while configuration files such as `Dockerfile` and `docker-compose.yml` remain at the project root.
+
 ## Prerequisites
 
 - Docker
