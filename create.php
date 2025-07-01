@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Inserir no MongoDB
     try {
-        $manager->executeBulkWrite('catalogosites.sites', $bulk);
+        $manager->executeBulkWrite($mongoDb . '.sites', $bulk);
     } catch (\Throwable $e) {
         error_log('MongoDB insert error: ' . $e->getMessage());
         die('Erro ao inserir dados.');

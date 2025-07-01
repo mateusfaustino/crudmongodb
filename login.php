@@ -25,7 +25,7 @@ if (isset($_POST['email'])) {
 
     // Executar a consulta
     try {
-        $cursor = $manager->executeQuery('catalogosites.usuarios', $query); // Usando "catalogosites"
+        $cursor = $manager->executeQuery($mongoDb . '.usuarios', $query);
         $usuario = current($cursor->toArray());
     } catch (\Throwable $e) {
         error_log('MongoDB query error: ' . $e->getMessage());

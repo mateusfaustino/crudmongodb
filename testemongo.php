@@ -7,12 +7,15 @@ if (!extension_loaded("mongodb")) {
 }
 /*
 // Conectando ao MongoDB
-$manager = new MongoDB\Driver\Manager("mongodb://localhost:27017");
+$mongoHost = getenv('MONGO_HOST') ?: 'mongo';
+$mongoPort = getenv('MONGO_PORT') ?: '27017';
+$mongoDb   = getenv('MONGO_DB')   ?: 'catalogosites';
+$manager = new MongoDB\Driver\Manager("mongodb://{$mongoHost}:{$mongoPort}");
 
 // Consulta para selecionar os documentos da coleção 'sites' no banco 'banco'
 $query = new MongoDB\Driver\Query([]);  // Consulta vazia para buscar todos os documentos
 try {
-    $cursor = $manager->executeQuery('catalogosites.sites', $query);
+    $cursor = $manager->executeQuery($mongoDb . '.sites', $query);
 } catch (\Throwable $e) {
     error_log('MongoDB query error: ' . $e->getMessage());
     die('Erro ao executar consulta.');

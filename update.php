@@ -17,7 +17,7 @@ if (isset($_GET['id'])) {
     $filter = ['_id' => $id];
     $query = new MongoDB\Driver\Query($filter);
     try {
-        $cursor = $manager->executeQuery('catalogosites.sites', $query);
+        $cursor = $manager->executeQuery($mongoDb . '.sites', $query);
         $site = current($cursor->toArray());
     } catch (\Throwable $e) {
         error_log('MongoDB fetch error: ' . $e->getMessage());
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Executar a atualização
     try {
-        $manager->executeBulkWrite('catalogosites.sites', $bulk);
+        $manager->executeBulkWrite($mongoDb . '.sites', $bulk);
     } catch (\Throwable $e) {
         error_log('MongoDB update error: ' . $e->getMessage());
         die('Erro ao atualizar dados.');
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $filter = ['_id' => $id];
     $query = new MongoDB\Driver\Query($filter);
     try {
-        $cursor = $manager->executeQuery('catalogosites.sites', $query);
+        $cursor = $manager->executeQuery($mongoDb . '.sites', $query);
         $site = current($cursor->toArray());
     } catch (\Throwable $e) {
         error_log('MongoDB fetch error: ' . $e->getMessage());
