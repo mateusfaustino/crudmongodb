@@ -5,6 +5,8 @@ require 'csrf.php';
 $token = generate_csrf_token();
 
 if (isset($_POST['email'])) {
+
+
     if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
@@ -38,7 +40,7 @@ if (isset($_POST['email'])) {
         $erro = "Email ou senha inválidos!";
     }
 }
-?>
+}?>
 
 <!DOCTYPE html>
 <html lang="pt-BR">

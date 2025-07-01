@@ -13,18 +13,9 @@ services:
   mongo:
     image: mongo:latest
     ports:
-      - "27017:27017"
+      - "27016:27017"
     volumes:
       - mongo_data:/data/db
-
-  compass:
-    image: mongodb/compass:latest
-    environment:
-      - DISPLAY=${DISPLAY}
-    volumes:
-      - /tmp/.X11-unix:/tmp/.X11-unix
-    depends_on:
-      - mongo
 
 volumes:
   mongo_data:
