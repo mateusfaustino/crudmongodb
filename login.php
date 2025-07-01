@@ -41,14 +41,8 @@ if (isset($_POST['email'])) {
     } else {
         $erro = "Email ou senha inválidos!";
     }
-}
-<<<<<<< HEAD
-}?>
-=======
+}}
 
 render_template('login', ['token' => $token, 'erro' => $erro]);
 
 ?>
->>>>>>> 0b8ae0c8835be33b03a4889671569dc0b41d455c
-
-
