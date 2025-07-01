@@ -15,7 +15,7 @@ if (isset($_GET['id'])) {
 
     // Executar a exclusão
     try {
-        $manager->executeBulkWrite('catalogosites.sites', $bulk);
+        $manager->executeBulkWrite($mongoDb . '.sites', $bulk);
     } catch (\Throwable $e) {
         error_log('MongoDB delete error: ' . $e->getMessage());
         die('Erro ao deletar dados.');

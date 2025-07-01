@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] === 'POST') {
         $bulk = new MongoDB\Driver\BulkWrite;
         $bulk->insert($document);
         try {
-            $manager->executeBulkWrite('catalogosites.usuarios', $bulk);
+            $manager->executeBulkWrite($mongoDb . '.usuarios', $bulk);
         } catch (\Throwable $e) {
             error_log('MongoDB insert error: ' . $e->getMessage());
             die('Erro ao cadastrar usuário.');

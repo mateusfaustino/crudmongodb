@@ -15,7 +15,7 @@ $query = new MongoDB\Driver\Query([]);
 
 // Executar a consulta
 try {
-    $cursor = $manager->executeQuery('catalogosites.sites', $query);
+    $cursor = $manager->executeQuery($mongoDb . '.sites', $query);
     $sites = $cursor->toArray();
 } catch (\Throwable $e) {
     error_log('MongoDB query error: ' . $e->getMessage());
