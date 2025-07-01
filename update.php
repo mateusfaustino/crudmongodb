@@ -4,7 +4,7 @@ session_start();
 require 'connection.php';
 require 'csrf.php';
 require 'template.php';
-$token = generate_csrf_token();
+$token = generateCsrfToken();
 $message = null;
 
 if (isset($_GET['id'])) {
@@ -26,7 +26,7 @@ if (isset($_GET['id'])) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!verify_csrf_token($_POST['csrf_token'] ?? '')) {
+    if (!verifyCsrfToken($_POST['csrf_token'] ?? '')) {
         die('CSRF validation failed');
     }
     $rawId = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_STRING);
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $message = 'Site atualizado com sucesso!';
 }
 
-render_template('update', compact('token', 'site', 'message'));
+renderTemplate('update', compact('token', 'site', 'message'));
 
 ?>
 
